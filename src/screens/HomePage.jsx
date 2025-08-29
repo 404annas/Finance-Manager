@@ -1,12 +1,12 @@
 import React from 'react';
-import Hero from '../components/Hero';
 import Sidebar from '../components/Sidebar';
+import HeroNav from '../components/HeroNav';
 
 const HomePage = () => {
   return (
     <div className='flex items-center bg-white h-screen'>
       <Sidebar />
-      <Hero />
+      <HeroNav />
     </div>
   );
 };
