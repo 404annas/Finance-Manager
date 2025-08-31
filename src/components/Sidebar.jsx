@@ -1,14 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { LayoutDashboard, CreditCard, History, Layers2, RefreshCcw, Users } from 'lucide-react';
 
 const Sidebar = () => {
     const menuItems = [
-        { icon: <LayoutDashboard size={23} />, label: "Dashboard" },
-        { icon: <CreditCard size={23} />, label: "Payments" },
-        { icon: <Layers2 size={23} />, label: "Category" },
-        { icon: <RefreshCcw size={23} />, label: "Exchange" },
-        { icon: <Users size={23} />, label: "Users" },
-        { icon: <History size={23} />, label: "History" },
+        { icon: <LayoutDashboard size={23} />, label: "Dashboard", path: "/" },
+        { icon: <CreditCard size={23} />, label: "Payments", path: "/" },
+        { icon: <Layers2 size={23} />, label: "Category", path: "/" },
+        { icon: <RefreshCcw size={23} />, label: "Exchange", path: "/" },
+        { icon: <History size={23} />, label: "History", path: "/" },
+        { icon: <Users size={23} />, label: "Add Users", path: "/add-users"  },
     ];
 
     return (
@@ -16,17 +17,18 @@ const Sidebar = () => {
             <h2 className="text-xl p-semibold text-[#6667DD] mb-6">Finance Manager</h2>
 
             {menuItems.map((item, index) => (
-                <div
+                <Link
+                    to={item.path}
                     key={index}
                     className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition
-                        ${index === 0
-                            ? "bg-purple-100 text-[#6667DD] font-medium"
+                        ${index === 0 || index === menuItems.length - 1
+                            ? "bg-purple-100 text-[#6667DD] hover:bg-purple-200 transition-all duration-300 font-medium"
                             : "text-gray-600 hover:bg-purple-100 hover:text-[#6667DD]"}
                     `}
                 >
                     {item.icon}
                     <span className='p-medium'>{item.label}</span>
-                </div>
+                </Link>
             ))}
         </div>
     );

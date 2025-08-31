@@ -14,7 +14,7 @@ const Hero = () => {
                     <div className='flex items-center gap-2'>
                         <div className='flex items-center gap-2 bg-[#6667DD] text-white px-4 py-3 rounded-full cursor-pointer hover:bg-[#5556cc] transition duration-300 p-regular'>
                             <p><Plus size={20} /></p>
-                            <p>Add Transaction</p>
+                            <p>Add Category</p>
                         </div>
                         <div className='flex items-center gap-2 bg-[#6667DD] text-white px-4 py-3 rounded-full cursor-pointer hover:bg-[#5556cc] transition duration-300 p-regular'>
                             <p><Send size={16} /></p>
