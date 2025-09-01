@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { UserRoundSearch, BellDot, LogOut, UserRound } from 'lucide-react';
 import Hero from './Hero';
 import Cards from './Cards';
 import HeroTransactions from './HeroTransactions';
 import { useAppContext } from '../context/AppContext';
 import Login from './Login';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 const HeroNav = () => {
   const { user, setUser, setToken, showUserLogin, setShowUserLogin } = useAppContext();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const token = searchParams.get("token");
+    if (token) {
+      // open modal automatically
+      setShowUserLogin(true);
+
+      // save invite token for register
+      localStorage.setItem("inviteToken", token);
+
+      // also force "register" mode (Login will read this)
+      localStorage.setItem("inviteMode", "register");
+    }
+  }, [searchParams, setShowUserLogin]);
 
   const logout = () => {
     setUser(null);

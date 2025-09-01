@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { UserRound, Mail, Lock } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { toast } from "sonner";
@@ -14,6 +14,13 @@ const Login = () => {
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
+
+        // auto-switch to register mode if invite
+        const inviteMode = localStorage.getItem("inviteMode");
+        if (inviteMode === "register") {
+            setState("register");
+        }
+
         return () => {
             document.body.style.overflow = "auto";
         };
@@ -31,6 +38,12 @@ const Login = () => {
                 formData.append("email", email);
                 formData.append("password", password);
                 if (image) formData.append("image", image);
+
+                // include invite token if present
+                const inviteToken = localStorage.getItem("inviteToken");
+                if (inviteToken) {
+                    formData.append("inviteToken", inviteToken);
+                }
 
                 res = await fetch(`http://localhost:8080/api/auth/${endpoint}`, {
                     method: "POST",
@@ -58,14 +71,17 @@ const Login = () => {
             localStorage.setItem('token', data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
 
+            // clear invite storage after success
+            localStorage.removeItem("inviteToken");
+            localStorage.removeItem("inviteMode");
+
             setShowUserLogin(false);
 
         } catch (err) {
-            console.error(err);
+            console.error(err.message);
             toast.error("Server error, please try again later.");
         }
     };
-
 
     return (
         <div onClick={() => setShowUserLogin(false)} className='fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center text-sm text-gray-600 bg-black/50'>

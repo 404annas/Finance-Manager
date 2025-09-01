@@ -6,6 +6,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { Toaster } from "sonner";
 import AddUserPage from './screens/AddUserPage';
+import AddUserProtectedRoute from "./routes/AddUserProtectedRoute"
+import InvitePage from './screens/InvitePage';
 
 function App() {
   return (
@@ -14,7 +16,15 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path='/profile' element={<ProfilePage />} />
-        <Route path="/add-users" element={<AddUserPage />} />
+        <Route
+          path="/add-users"
+          element={
+            <AddUserProtectedRoute>
+              <AddUserPage />
+            </AddUserProtectedRoute>
+          }
+        />
+        <Route path='/invite' element={<InvitePage />} />
       </Routes>
       {/* <Footer /> */}
 

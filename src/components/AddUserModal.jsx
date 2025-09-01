@@ -3,6 +3,8 @@ import { Plus, Send } from "lucide-react";
 
 const AddUser = () => {
     const [emails, setEmails] = useState([""]);
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
 
     // Handle input change
     const handleInputChange = (index, value) => {
@@ -14,6 +16,37 @@ const AddUser = () => {
     // Add new email field
     const addEmailField = () => {
         setEmails([...emails, ""]);
+    };
+
+    // Send invites
+    const sendInvites = async () => {
+        setLoading(true);
+        setMessage("");
+
+        try {
+            for (let email of emails) {
+                if (!email) continue;
+
+                const res = await fetch("http://localhost:8080/api/invite", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email }),
+                });
+
+                const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(data.message || "Failed to send invite");
+                }
+            }
+
+            setMessage("✅ Invites sent successfully!");
+            setEmails([""]); // reset
+        } catch (error) {
+            console.error(error.message);
+            setMessage("❌ Error sending invites");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -48,11 +81,18 @@ const AddUser = () => {
 
             {/* Send Invite */}
             <button
-                className="mt-6 w-full flex items-center justify-center gap-2 bg-[#6667DD] hover:bg-[#4c4eaa] text-white py-3 rounded-xl p-semibold transition-all duration-300 cursor-pointer"
+                onClick={sendInvites}
+                disabled={loading}
+                className="mt-6 w-full flex items-center justify-center gap-2 bg-[#6667DD] hover:bg-[#4c4eaa] text-white py-3 rounded-xl p-semibold transition-all duration-300 cursor-pointer disabled:opacity-50"
             >
                 <Send className="w-5 h-5" />
-                Send Invite
+                {loading ? "Sending..." : "Send Invite"}
             </button>
+
+            {/* Message */}
+            {message && (
+                <p className="mt-4 text-center text-sm text-gray-700 p-regular">{message}</p>
+            )}
         </div>
     );
 };
